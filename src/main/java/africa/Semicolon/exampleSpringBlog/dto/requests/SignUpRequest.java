@@ -1,4 +1,4 @@
-package africa.Semicolon.exampleSpringBlog.dto;
+package africa.Semicolon.exampleSpringBlog.dto.requests;
 
 import lombok.Data;
 

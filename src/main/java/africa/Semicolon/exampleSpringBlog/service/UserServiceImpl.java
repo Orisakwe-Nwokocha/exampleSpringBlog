@@ -1,6 +1,7 @@
 package africa.Semicolon.exampleSpringBlog.service;
 
-import africa.Semicolon.exampleSpringBlog.dto.SignUpRequest;
+import africa.Semicolon.exampleSpringBlog.dto.requests.LoginRequest;
+import africa.Semicolon.exampleSpringBlog.dto.requests.SignUpRequest;
 import africa.Semicolon.exampleSpringBlog.entity.Role;
 import africa.Semicolon.exampleSpringBlog.entity.User;
 import africa.Semicolon.exampleSpringBlog.repository.UserRepository;
@@ -25,5 +26,17 @@ public class UserServiceImpl implements UserService{
         user.setRole(Role.USER);
 
         userRepository.save(user);
+    }
+
+    @Override
+    public void loginUser(LoginRequest loginRequest) {
+        User foundUser = userRepository.findByEmail(loginRequest.getEmail());
+        if (foundUser == null) throw new  IllegalArgumentException("User not found");
+        validate(loginRequest.getPassword(), foundUser.getPassword());
+    }
+
+    private void validate(String rawPassword, String encodedPassword) {
+        boolean matches = passwordEncoder.matches(rawPassword, encodedPassword);
+        if (!matches) throw new IllegalArgumentException("Password does not match");
     }
 }
